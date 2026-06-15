@@ -1,0 +1,38 @@
+model:
+  base_model: "microsoft/trocr-base-handwritten"
+  adapter: null  # chemin vers les poids PEFT, null = pas de fine-tuning
+
+peft:
+  method: "lora"
+  r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  target_modules: ["query", "value"]
+
+training:
+  output_dir: "experiments/trocr_run_001"
+  num_train_epochs: 10
+  per_device_train_batch_size: 8
+  per_device_eval_batch_size: 16
+  learning_rate: 5.0e-5
+  warmup_steps: 100
+  weight_decay: 0.01
+  fp16: true
+  evaluation_strategy: "epoch"
+  save_strategy: "epoch"
+  load_best_model_at_end: true
+  metric_for_best_model: "cer"
+  greater_is_better: false
+  seed: 42
+
+data:
+  train_split: "data/splits/train.json"
+  val_split: "data/splits/val.json"
+  test_split: "data/splits/test.json"
+  image_size: [384, 384]
+  max_target_length: 128
+
+inference:
+  max_new_tokens: 128
+  num_beams: 4
+  device: "cuda"

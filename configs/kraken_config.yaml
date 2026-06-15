@@ -1,0 +1,29 @@
+model:
+  base_model: "cremma-medieval"  # identifiant HTR-United ou chemin local .mlmodel
+  output_model: "experiments/kraken_run_001/best.mlmodel"
+
+training:
+  ground_truth_dir: "ground_truth/eScriptorium_exports"
+  epochs: 50
+  learning_rate: 1.0e-4
+  min_lr: 1.0e-5
+  momentum: 0.9
+  batch_size: 16
+  device: "cuda"
+  workers: 4
+  seed: 42
+  augment: true
+  normalization: "NFD"  # normalisation Unicode pour le français ancien
+
+segmentation:
+  model: "blla"  # segmenteur Kraken par défaut (baseline + ligne)
+  topline: false
+
+data:
+  train_split: "data/splits/train.json"
+  val_split: "data/splits/val.json"
+  test_split: "data/splits/test.json"
+
+evaluation:
+  cer_threshold: 0.15
+  eval_frequency: 5  # évaluer tous les N epochs
